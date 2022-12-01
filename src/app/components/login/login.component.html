@@ -1,0 +1,41 @@
+<div class="container p-3 mt-4 mb-5">
+    <div class="form-holder-div border rounded p-4 shadow-lg bg-white">
+        <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="close()">
+            <strong>{{ alert.title }}</strong>
+            {{ alert.message }}
+        </ngb-alert>
+        <div class="form-holder-div-title">
+            <h3>User Login</h3>
+        </div>
+        <hr>
+        <div class="form-holder-div-body">
+            <form #loginForm="ngForm">
+                <mat-form-field>
+                    <input matInput placeholder="Enter your email" [formControl]="email" required>
+                    <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+                    <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </mat-form-field>
+
+                <div class="text-center">
+                    <button mat-raised-button color="primary" [disabled]="loginForm.form.invalid || submitted"
+                        (click)="validateUser(loginForm)">
+                        Send <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div class="flex-col-c p-t-40 p-b-20">
+                    <span class="txt1 p-b-9">
+                        Don't have an account?
+                    </span>
+                    <a href="#" class="txt3">
+                        Sign up now
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

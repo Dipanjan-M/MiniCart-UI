@@ -1,0 +1,25 @@
+.navbar-brand {
+    padding-left: 1em;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.navbar-toggler-margin-right {
+    margin-right: 1.2em;
+}
+
+.navbar-nav-padding-left {
+    padding-left: 1.5em;
+}
+
+.navbar-brand>i {
+    font-size: 1.5em;
+}
+
+.navbar-light .nav-item.active .nav-link,
+.navbar-light .nav-item .nav-link:active,
+.navbar-light .nav-item .nav-link:focus,
+.navbar-light .nav-item:hover .nav-link {
+    /* color: #00a9de; */
+    color: #ff0000;
+}

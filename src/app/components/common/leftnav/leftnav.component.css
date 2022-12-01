@@ -1,0 +1,54 @@
+.sidenav {
+    height: 100%;
+    width: 240px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #efefef;
+    overflow: hidden;
+    padding-top: 56px;
+}
+
+.innernav {
+    height: 100%;
+    overflow-y: auto;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.sidenav > .innernav > a {
+    padding: 2px 8px 2px 20px;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    color: #101010;
+}
+
+.sidenav > .innernav > a.active {
+    background-color: #00a8f6;
+    color: #fff;
+}
+
+.sidenav > .innernav > a:hover {
+    color: #000;
+    background-color: #bababa;
+}
+
+.sidenav > .innernav > a.active:hover {
+    background-color: #00a8f6;
+    color: #fff;
+}
+
+.sidenav > .innernav > h3.innernav-heading {
+    margin-bottom: 0;
+    padding: 12px 0 0 10px;
+    font-family: monospace;
+    font-size: 18px;
+    cursor: default;
+    font-weight: bold;
+}
+
+.main {
+    margin-left: 240px;
+    padding-top: 5px;
+}

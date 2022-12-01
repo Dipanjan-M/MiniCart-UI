@@ -1,0 +1,25 @@
+<footer class="container-fluid bg-light p-3">
+    <div class="row">
+        <div class="col">
+            <div class="p-3 text-left">
+                <span style="font-size: 18px"><i class="fa fa-cart-plus" aria-hidden="true"></i> Mini Cart &reg;
+                    &trade;</span><br />
+                The Simplest, Fast & Powerful shopping portal
+            </div>
+        </div>
+        <div class="col">
+            <div class="p-3" [ngStyle]="{'margin-left': isLoggedIn()? '50%':'60%'}">
+                Developed & Maintained By - <br />
+
+                <a href="https://github.com/Dipanjan-M" target="_blank"
+                    style="text-decoration: none; color: #555; padding-left: 1vw"><i class="fa fa-github-alt"
+                        aria-hidden="true"></i> Dipanjan-M</a>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        &copy;{{ date | date:'yyyy' }}<span> | </span>
+        <a routerLink="home">www.mini-cart.com</a><br>
+        All Rights are Reserved
+    </div>
+</footer>

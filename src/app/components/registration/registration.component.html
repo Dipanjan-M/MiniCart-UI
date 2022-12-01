@@ -1,0 +1,64 @@
+<div class="container p-3 mt-4 mb-5">
+    <div class="form-holder-div border rounded p-4 shadow-lg bg-white">
+        <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="close()">
+            <strong>{{ alert.title }}</strong>
+            {{ alert.message }}
+        </ngb-alert>
+        <div class="form-holder-div-title">
+            <h3>User Registration</h3>
+        </div>
+        <div class="form-holder-div-body">
+            <form class="mb-4" [formGroup]="registrationForm">
+                <div class="mb-3 mt-3">
+                    <label class="form-label">First Name:</label>
+                    <input type="text" class="form-control"
+                        [ngClass]="{'border border-danger': evaluateFieldError('firstName')}"
+                        placeholder="Enter first name" formControlName="firstName">
+                    <ng-container *ngIf=" evaluateFieldError('firstName')">
+                        <div *ngFor="let err of valErrs?.firstName">
+                            <span class="validation-err-msg">{{ err }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name:</label>
+                    <input type="text" class="form-control"
+                        [ngClass]="{'border border-danger': evaluateFieldError('lastName')}"
+                        placeholder="Enter last name" formControlName="lastName">
+                    <ng-container *ngIf=" evaluateFieldError('lastName')">
+                        <div *ngFor="let err of valErrs?.lastName">
+                            <span class="validation-err-msg">{{ err }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email:</label>
+                    <input type="text" class="form-control"
+                        [ngClass]="{'border border-danger': evaluateFieldError('email')}"
+                        placeholder="Enter email address" formControlName="email">
+                    <ng-container *ngIf=" evaluateFieldError('email')">
+                        <div *ngFor="let err of valErrs?.email">
+                            <span class="validation-err-msg">{{ err }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password:</label>
+                    <input type="password" class="form-control"
+                        [ngClass]="{'border border-danger': evaluateFieldError('password')}"
+                        placeholder="Enter Password" formControlName="password">
+                    <ng-container *ngIf="evaluateFieldError('password')">
+                        <div *ngFor="let err of valErrs?.password">
+                            <span class="validation-err-msg">{{ err }}</span>
+                        </div>
+                    </ng-container>
+                </div>
+            </form>
+            <div class="submit-btn-holder mb-3 clearfix">
+                <button class="btn btn-warning float-start" (click)="onReset()">Reset</button>
+                <button type="submit" class="btn btn-success float-end" (click)="onSubmit()">Submit</button>
+            </div>
+            <p>Already registered ? Go to <a routerLink="/login">Login page</a></p>
+        </div>
+    </div>
+</div>

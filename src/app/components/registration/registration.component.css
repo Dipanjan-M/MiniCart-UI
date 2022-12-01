@@ -1,0 +1,38 @@
+.form-holder-div {
+    width: 70%;
+    margin: auto;
+}
+
+.form-holder-div-title {
+    text-align: center;
+}
+
+.form-holder-div-body > form {
+    width: 90%;
+    margin: auto;
+}
+
+.form-holder-div-body > form > div.submit-btn-holder {
+    padding-top: 1.2em;
+    text-align: center;
+}
+
+.form-holder-div-body > div.submit-btn-holder {
+    width: 90%;
+    margin: auto;
+}
+
+.form-holder-div-body > div.submit-btn-holder > button {
+    width: 40%;
+    font-size: 20px;
+    margin: auto;
+}
+
+.form-holder-div-body > p {
+    text-align: center;
+}
+
+.validation-err-msg {
+    font-size: 14px;
+    color: #f00;
+}
