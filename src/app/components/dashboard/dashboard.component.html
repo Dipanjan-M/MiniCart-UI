@@ -1,35 +1,95 @@
 <div class="container-fluid">
-    <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+    <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="closeAlert()">
+        <strong>{{ alert.title }}</strong><br />
+        {{ alert.message }}
+    </ngb-alert>
     <div class="row card-group mb-4">
-        <div class="col-4 mb-4" *ngFor="let item of items">
+        <div class="col-3 mb-4" *ngFor="let item of items">
             <div class="card h-100">
-                <div class="card-header">{{ item.name }}</div>
-                <div class="card-body">{{ item.description }}</div>
-                <div class="card-footer">{{ item.price | currency:'INR' }}</div>
+                <div class="card-header">
+                    <strong> {{ item.name }} </strong>
+                </div>
+                <div class="card-body">
+                    <p> {{ item.description }} </p>
+                    <span> {{ item.price | currency:'INR' }} </span>
+                </div>
+                <div class="card-footer">
+                    <span>
+                        <mat-icon matTooltip="Add item to cart" (click)="open(addItemToShoppingList, item)">
+                            add_shopping_cart
+                        </mat-icon>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<ng-template #content let-modal>
+<ng-template #addItemToShoppingList let-modal1>
     <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        <h4 class="modal-title m-auto" id="add-item-to-cart">Add item to Shopping List</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal1.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body p-3">
+        <form #frm1="ngForm" class="p-3">
+            <label class="form-label">Shopping List Name</label>
+            <span style="float: right;">
+                Want new list?
+                <span class="badge rounded-pill bg-warning" style="cursor: pointer;"
+                    (click)="openAnother(createNewShoppingList)">Create</span>
+            </span>
+            <select name="orderDesc" id="orderDesc" class="form-select" [(ngModel)]="shoppingDesc" required>
+                <option *ngIf="shoppingDesc === undefined" value="Select a shopping list" selected disabled>
+                    Select a shopping list
+                </option>
+                <option *ngFor="let desc of shoppingDescList" [value]="desc">{{desc}}</option>
+            </select>
+            <div class="row mt-3">
+                <div class="col">
+                    <label class="form-label">Item Name</label>
+                    <input name="itemName" type="text" class="form-control" [value]="itemAndQty.name"
+                        [(ngModel)]="itemAndQty.name" disabled />
+                    <label class="form-label">Quantity</label>
+                    <input name="qty" type="number" class="form-control" [value]="itemAndQty.qty" min="1" max="10"
+                        [(ngModel)]="itemAndQty.qty" />
+                </div>
+                <div class="col">
+                    <i><b>Item Description - </b></i>
+                    <p>{{ itemAndQty.desc }}</p>
+                    <span style="float: right;"><b>{{ itemAndQty.price | currency:'INR' }}</b></span>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-success" (click)="addToCart();modal1.close('Close click')" [disabled]="!frm1.valid || submitted">Add</button>
+            </div>
+        </form>
+        <p>{{ itemAndQty | json }} {{ shoppingDesc }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal1.close('Close click')">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #createNewShoppingList let-modal2>
+    <div class="modal-header">
+        <h4 class="modal-title m-auto" id="new-shopping-list-modal">Create new Shopping List</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal2.dismiss('Cross click')"></button>
     </div>
     <div class="modal-body">
-        <form>
-            <div class="mb-3">
-                <label for="dateOfBirth">Date of birth</label>
-                <div class="input-group">
-                    <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
-                        #dp="ngbDatepicker" />
-                    <button class="btn btn-outline-secondary bi bi-calendar3" (click)="dp.toggle()"
-                        type="button"></button>
-                </div>
+        <form #frm2="ngForm">
+            <label>Enter New Shopping List Name</label><br /><br />
+            <input name="shoppingListName" type="text" class="form-control" [value]="createNewOrder.orderDescription"
+                [(ngModel)]="createNewOrder.orderDescription" required />
+            <br /><br />
+            <div class="text-center">
+                <button class="btn btn-primary" (click)="addNewOrderModel();modal2.close('Close click')"
+                    [disabled]="!frm2.valid">
+                    Create
+                </button>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="modal2.close('Close click')">Close</button>
     </div>
 </ng-template>

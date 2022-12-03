@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Item } from 'src/app/models/item';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemService } from 'src/app/services/item.service';
+import { ItemAndQty } from 'src/app/models/item-and-qty';
+import { CreateOrderModel } from 'src/app/models/create-order-model';
+import { User } from 'src/app/models/user.model';
+import { CountItem } from 'src/app/models/count-item.model';
+import { CommonService } from 'src/app/utils/common.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -9,120 +16,111 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 })
 export class DashboardComponent implements OnInit {
 
-  items: Item[] = [
-    {
-      "id": 1,
-      "name": "Laptop",
-      "description": "Compact electronic computer",
-      "price": 80000.0
-    },
-    {
-      "id": 2,
-      "name": "Smartphone",
-      "description": "Samsung latest Smart phone",
-      "price": 22500.0
-    },
-    {
-      "id": 3,
-      "name": "Cookies",
-      "description": "Biskfarm cookies & snacks",
-      "price": 125.5
-    },
-    {
-      "id": 4,
-      "name": "Cold-drinks",
-      "description": "Coca-cola cold drinks",
-      "price": 99.79
-    },
-    {
-      "id": 5,
-      "name": "Rice",
-      "description": "10Kg rice bag from Ganesh",
-      "price": 550.0
-    },
-    {
-      "id": 6,
-      "name": "Washing-Machine",
-      "description": "BOSCH heavy duty washing machine (Front load)",
-      "price": 35378.56
-    },
-    {
-      "id": 7,
-      "name": "QLED-TV",
-      "description": "Samsung NEO QLED TV",
-      "price": 278586.89
-    },
-    {
-      "id": 8,
-      "name": "Trousers(M)",
-      "description": "Trousers for Men",
-      "price": 999.0
-    },
-    {
-      "id": 9,
-      "name": "Trousers(F)",
-      "description": "Trousers for women",
-      "price": 999.0
-    },
-    {
-      "id": 10,
-      "name": "iPhone-X",
-      "description": "iPhone 10 from Apple Inc., 128GB",
-      "price": 79999.0
-    },
-    {
-      "id": 11,
-      "name": "Macbook Pro",
-      "description": "Latest Macbook from Apple Inc. Pro version",
-      "price": 250000.0
-    },
-    {
-      "id": 12,
-      "name": "Shampoo",
-      "description": "Sunsilk shampoo from HU LTD. 450ml",
-      "price": 349.0
-    },
-    {
-      "id": 13,
-      "name": "T-shirt",
-      "description": "T-shirts for men",
-      "price": 500.0
-    },
-    {
-      "id": 14,
-      "name": "Camera",
-      "description": "DSLR camera from Sony",
-      "price": 85000.0
-    }
-  ];
+  alert: any;
+  items?: Item[];
+  submitted: boolean = false;
+
+  shoppingCart: CreateOrderModel[] = [];
+
+  shoppingDescList: string[] = [];
+  shoppingDesc?: string;
+  itemAndQty = new ItemAndQty();
+  createNewOrder: CreateOrderModel = new CreateOrderModel();
+
 
   closeResult = '';
 
-  constructor(private modalService: NgbModal) { }
+  modalsNumber = 0;
 
-  ngOnInit(): void {
+  constructor(private modalService: NgbModal, private itemSvc: ItemService, private commonSvc: CommonService) {
+    this.modalService.activeInstances.subscribe((list) => {
+      this.modalsNumber = list.length;
+    });
   }
 
-  open(content: any) {
-    console.log(content);
-		this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
-			(result) => {
-				this.closeResult = `Closed with: ${result}`;
-			},
-			(reason) => {
-				this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-			},
-		);
-	}
+  ngOnInit(): void {
+    this.itemSvc.getAllItems().subscribe(
+      res => {
+        this.items = <any>res.body;
+      },
+      err => {
 
-	private getDismissReason(reason: any): string {
-		if (reason === ModalDismissReasons.ESC) {
-			return 'by pressing ESC';
-		} else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-			return 'by clicking on a backdrop';
-		} else {
-			return `with: ${reason}`;
-		}
-	}
+        this.alert = {
+          type: 'danger',
+          title: 'Service Unavialable',
+          message: 'Item service is temporarily down'
+        };
+      }
+    );
+  }
+
+  closeAlert(): void {
+    this.alert = undefined;
+  }
+
+  open(content: any, item: Item) {
+    this.shoppingDesc = undefined;
+    this.shoppingDescList = new Array();
+    if (window.sessionStorage.getItem('cart') !== null) {
+      this.shoppingCart = JSON.parse(window.sessionStorage.getItem('cart')!);
+      this.shoppingCart.forEach((order) => {
+        this.shoppingDescList.push(order.orderDescription!);
+      });
+    }
+
+    this.itemAndQty.name = item.name;
+    this.itemAndQty.qty = 1;
+    this.itemAndQty.desc = item.description;
+    this.itemAndQty.price = item.price;
+
+    this.modalService.open(content, { ariaLabelledBy: 'add-item-to-cart', size: 'lg' });
+  }
+
+  openAnother(createNewShoppingList: any) {
+    let user: User = JSON.parse(window.sessionStorage.getItem('userDetails')!);
+    this.createNewOrder.orderDescription = user.firstName + '\'s order on ' + new Date().toLocaleString();
+    this.modalService.open(createNewShoppingList, { ariaLabelledBy: 'new-shopping-list-modal' });
+  }
+
+  addNewOrderModel(): void {
+    this.shoppingCart.push(this.createNewOrder);
+    this.shoppingDescList = new Array();
+    window.sessionStorage.setItem('cart', JSON.stringify(this.shoppingCart));
+    if (window.sessionStorage.getItem('cart') !== null) {
+      this.shoppingCart = JSON.parse(window.sessionStorage.getItem('cart')!);
+      this.shoppingCart.forEach((order) => {
+        this.shoppingDescList.push(order.orderDescription!);
+      });
+    }
+    this.commonSvc.cartItemAdded("New Shopping list added");
+  }
+
+  addToCart(): void {
+    this.submitted = true;
+    this.shoppingCart = JSON.parse(window.sessionStorage.getItem('cart')!);
+    let modifiedCart: CreateOrderModel[] = [];
+    this.shoppingCart.forEach(data => {
+      if (data.orderDescription === this.shoppingDesc) {
+        if (data.itemNamesAndCount !== undefined) {
+          let flag = 0;
+          data.itemNamesAndCount.forEach(can => {
+            if (can.itemName == this.itemAndQty.name) {
+              flag = 1;
+              can.count = can.count + this.itemAndQty.qty;
+            }
+          });
+          if(flag === 0) {
+            data.itemNamesAndCount.push(new CountItem(this.itemAndQty.name, this.itemAndQty.qty));
+          }
+        } else {
+          data.itemNamesAndCount = Array.of(new CountItem(this.itemAndQty.name, this.itemAndQty.qty));
+        }
+      }
+      modifiedCart.push(data);
+    });
+    console.log(JSON.stringify(modifiedCart));
+    window.sessionStorage.setItem('cart', JSON.stringify(modifiedCart));
+    this.submitted = false;
+  }
 
 }

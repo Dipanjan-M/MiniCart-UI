@@ -2,7 +2,7 @@
     <div class="form-holder-div border rounded p-4 shadow-lg bg-white">
         <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="close()">
             <strong>{{ alert.title }}</strong>
-            {{ alert.message }}
+            <p [innerHTML]="alert.message"></p>
         </ngb-alert>
         <div class="form-holder-div-title">
             <h3>User Registration</h3>
@@ -56,7 +56,7 @@
             </form>
             <div class="submit-btn-holder mb-3 clearfix">
                 <button class="btn btn-warning float-start" (click)="onReset()">Reset</button>
-                <button type="submit" class="btn btn-success float-end" (click)="onSubmit()">Submit</button>
+                <button type="submit" class="btn btn-success float-end" (click)="onSubmit()" [disabled]="submitted">Submit</button>
             </div>
             <p>Already registered ? Go to <a routerLink="/login">Login page</a></p>
         </div>

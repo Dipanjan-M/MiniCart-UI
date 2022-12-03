@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,17 +12,22 @@ import { CustomLottiePlayerModule } from './myModules/custom-lottie-player/custo
 
 import { AppComponent } from './app.component';
 import { routingComponents as RoutingComponents } from './app-routing.module';
-import { LeftnavComponent } from './components/common/leftnav/leftnav.component';
+
+
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './utils/auth.guard';
+import { ApiInterceptorService } from './utils/api-interceptor.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    RoutingComponents,
-    LeftnavComponent
+    RoutingComponents
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
@@ -28,7 +35,15 @@ import { LeftnavComponent } from './components/common/leftnav/leftnav.component'
     CustomLottiePlayerModule,
     MyBootstrapModule
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptorService,
+      multi: true
+    },
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

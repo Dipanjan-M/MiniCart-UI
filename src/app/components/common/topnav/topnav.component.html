@@ -1,6 +1,6 @@
 <div class="mb-5 pb-5">
-    <nav class="navbar navbar-expand-md bg-light navbar-light fixed-top">
-        <a class="navbar-brand" routerLink="home">
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+        <a class="navbar-brand" routerLink="/home">
             <i class="fa fa-cart-plus" aria-hidden="true"></i> Mini Cart
         </a>
 
@@ -12,23 +12,28 @@
         <div id="collapseBasic" class="navbar-collapse justify-content-end" [ngbCollapse]="isCollapsed">
             <ul class="navbar-nav" [ngClass]="{'navbar-nav-padding-left':!isCollapsed}">
                 <li class="nav-item" *ngIf="!isLoggedIn()">
-                    <a class="nav-link" routerLink="home" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/home" routerLinkActive="active">
                         <i class="fa fa-home" aria-hidden="true"></i> Home
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="!isLoggedIn()">
-                    <a class="nav-link" routerLink="registration" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/registration" routerLinkActive="active">
                         <i class="fa fa-user-plus" aria-hidden="true"></i> Register
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="!isLoggedIn()">
-                    <a class="nav-link" routerLink="login" routerLinkActive="active">
+                    <a class="nav-link" routerLink="/login" routerLinkActive="active">
                         <i class="fa fa-sign-in" aria-hidden="true"></i> Login
                     </a>
                 </li>
                 <li class="nav-item" *ngIf="isLoggedIn()">
-                    <a class="nav-link" routerLink="logout" routerLinkActive="active">
-                        <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+                    <a class="nav-link text-white">
+                        Welcome {{ user.firstName }} {{ user.lastName }}
+                    </a>
+                </li>
+                <li class="nav-item" *ngIf="isLoggedIn()">
+                    <a class="nav-link" (click)="logout()" style="cursor: pointer;">
+                        <i class="fa fa-power-off" aria-hidden="true"></i> Logout
                     </a>
                 </li>
             </ul>

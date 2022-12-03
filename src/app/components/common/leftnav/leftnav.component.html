@@ -1,28 +1,27 @@
 <app-topnav [loginStatus]="isLoggedIn()"></app-topnav>
 <div class="sidenav" *ngIf="isLoggedIn()">
     <div class="innernav">
-        <a href="">Link 1</a>
-        <h3 class="innernav-heading">InnerNav Heading 1</h3>
-        <a href="">Link 1</a>
-        <a href="">Link 2</a>
-        <a href="">Link 3</a>
-        <a href="">Link 4</a>
-        <h3 class="innernav-heading">InnerNav Heading 2</h3>
-        <a href="">Link 1</a>
-        <a href="">Link 2</a>
-        <h3 class="innernav-heading">InnerNav Heading 3</h3>
-        <a href="">Link 1</a>
-        <a href="" class="active">Link 2</a>
-        <a href="">Link 3</a>
-        <a href="">Link 1</a>
-        <a href="">Link 2</a>
-        <a href="">Link 3</a>
-        <a href="">Link 1</a>
-        <a href="">Link 2</a>
-        <a href="">Link 3</a>
-        <a href="">Link 1</a>
-        <a href="">Link 2</a>
-        <a href="">Link 3</a>
+        <a routerLink="/dashboard" routerLinkActive="active">
+            <i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard
+        </a>
+        <h3 *ngIf="hasAdminRole()" class="innernav-heading">Admin Controls</h3>
+        <a *ngIf="hasAdminRole()" routerLink="/item-control" routerLinkActive="active">
+            <i class="fa fa-database" aria-hidden="true"></i> Items Management
+        </a>
+        <a *ngIf="hasAdminRole()" routerLink="/customers-sos" routerLinkActive="active">
+            <i class="fa fa-users" aria-hidden="true"></i> Registered Customers
+        </a>
+        <a *ngIf="hasAdminRole()" routerLink="/orders-insight" routerLinkActive="active">
+            <i class="fa fa-history" aria-hidden="true"></i> All Orders
+        </a>
+        <h3 class="innernav-heading">Order Management</h3>
+        <a routerLink="/cart-management" routerLinkActive="active">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart 
+            <span class="badge bg-danger" *ngIf="cartOrders && cartOrders.length > 0">{{ cartOrders.length }}</span>
+        </a>
+        <a routerLink="/orders-management" routerLinkActive="active">
+            <i class="fa fa-shopping-basket" aria-hidden="true"></i> My Orders
+        </a>
     </div>
 </div>
 <div [ngClass]="{'main': isLoggedIn()}">
