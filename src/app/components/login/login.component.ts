@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/utils/common.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private _auth: AuthService, private _router: Router) { 
+  constructor(private _auth: AuthService, private _router: Router, private commonSvc: CommonService) { 
     window.sessionStorage.removeItem('userDetails');
     window.sessionStorage.removeItem('token');
   }
@@ -39,6 +40,7 @@ export class LoginComponent implements OnInit {
         this.loginModel = <any>res.body;
         window.sessionStorage.setItem('userDetails', JSON.stringify(this.loginModel));
         this.submitted = false;
+        this.commonSvc.loginSuccess(true);
         this._router.navigate(['/dashboard']);
       },
       err => {

@@ -1,1 +1,75 @@
-<p>orders works!</p>
+<div class="container pb-3 mb-4">
+    <h2 *ngIf="myOrders.length == 0" class="pb-3 mb-4">No order found</h2>
+    <!-- <div *ngFor="let orderOv of myOrders">{{ orderOv | json }}</div> -->
+    <div class="row card-group mb-4">
+        <div class="col-3 mb-4" *ngFor="let orderOv of myOrders">
+            <div class="card h-100 shadow">
+                <div class="card-body">
+                    <h5>{{ orderOv.orderDesc }}</h5>
+                    <span style="float: left;">
+                        <i>{{ orderOv.orderDate }}</i>
+                    </span>
+                    <span style="float: right;">
+                        <strong>{{ orderOv.orderAmt | currency: 'INR' }}</strong>
+                    </span>
+                </div>
+                <div class="card-footer">
+                    <span>
+                        <mat-icon matTooltip="View Bill"
+                            (click)="viewBill(viewBillModal, orderOv.orderId, orderOv.orderAmt)">
+                            list_alt
+                        </mat-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #viewBillModal let-modal1>
+    <div class="modal-header">
+        <h4 class="modal-title m-auto" id="view-bill-details">Order Snapshot :: Bill</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal1.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body p-3">
+        <div class="row p-3">
+            <div class="col">
+                <h5>{{ orderSnap?.orderDescription }}</h5>
+            </div>
+            <div class="col">
+                Order Id : {{ orderSnap?.orderId }} <br />
+                Order Date: <i>{{ orderSnap?.orderDate }}</i>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Particular</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of orderSnap?.orderedItems; index as i;">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ item.itemName }}</td>
+                        <td>{{ item.itemQuantity | number }}</td>
+                        <td>{{ item.unitPrice | currency: 'INR' }}</td>
+                        <td>{{ getTotal(item.unitPrice, item.itemQuantity) | currency: 'INR' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><b>Grand total -</b></td>
+                        <td><b><i>{{ orderTotalAmount | currency: 'INR' }}</i></b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal1.close('Close click')">Close</button>
+    </div>
+</ng-template>

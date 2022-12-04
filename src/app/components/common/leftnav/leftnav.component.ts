@@ -10,17 +10,29 @@ import { CommonService } from 'src/app/utils/common.service';
 })
 export class LeftnavComponent implements OnInit {
 
+  cartKey?: string;
+
   cartOrders: CreateOrderModel[] = [];
 
-  constructor(private _auth: AuthService, private commonSvc: CommonService) { }
+  constructor(private _auth: AuthService, private commonSvc: CommonService) {
+    if (window.sessionStorage.getItem('userDetails') !== null) {
+      this.cartKey = this.commonSvc.getCartKeyForLoggedInUser();
+      this.cartOrders = JSON.parse(window.localStorage.getItem(this.cartKey!)!);
+    }
+  }
 
   ngOnInit(): void {
-    this.cartOrders = JSON.parse(window.sessionStorage.getItem('cart')!);
-    this.commonSvc.newCartItemAddedEvent
-    .subscribe((data:string) => {
-      console.log('Event message from Component A: ' + data);
-      this.cartOrders = JSON.parse(window.sessionStorage.getItem('cart')!);
+    this.commonSvc.loginSuccessEvent.subscribe((data: boolean) => {
+      if (data) {
+        this.cartKey = this.commonSvc.getCartKeyForLoggedInUser();
+        this.cartOrders = JSON.parse(window.localStorage.getItem(this.cartKey!)!);
+      }
     });
+    this.commonSvc.newCartItemAddedEvent
+      .subscribe((data: string) => {
+        console.log('Event message from Component A: ' + data);
+        this.cartOrders = JSON.parse(window.localStorage.getItem(this.cartKey!)!);
+      });
   }
 
   isLoggedIn(): boolean {

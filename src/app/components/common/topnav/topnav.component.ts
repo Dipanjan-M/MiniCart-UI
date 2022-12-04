@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { CommonService } from 'src/app/utils/common.service';
 
 @Component({
   selector: 'app-topnav',
@@ -19,10 +20,18 @@ export class TopnavComponent implements OnInit {
 
   public isCollapsed: boolean = true;
 
-  constructor(private authSvc: AuthService) { }
+  constructor(private authSvc: AuthService, private commonSvc: CommonService) { 
+    if(window.sessionStorage.getItem('userDetails') !== null) {
+      this.user = JSON.parse(window.sessionStorage.getItem('userDetails')!);
+    }
+  }
 
-  ngOnInit(): void {
-    this.user = JSON.parse(window.sessionStorage.getItem('userDetails')!);
+  ngOnInit(): void { 
+    this.commonSvc.loginSuccessEvent.subscribe((data: boolean)=>{
+      if(data) {
+        this.user = JSON.parse(window.sessionStorage.getItem('userDetails')!);
+      }
+    });
   }
 
   isLoggedIn(): boolean {

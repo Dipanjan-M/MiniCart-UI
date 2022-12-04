@@ -63,7 +63,7 @@
                 <button class="btn btn-success" (click)="addToCart();modal1.close('Close click')" [disabled]="!frm1.valid || submitted">Add</button>
             </div>
         </form>
-        <p>{{ itemAndQty | json }} {{ shoppingDesc }}</p>
+        <!-- <p>{{ itemAndQty | json }} {{ shoppingDesc }}</p> -->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal1.close('Close click')">Close</button>

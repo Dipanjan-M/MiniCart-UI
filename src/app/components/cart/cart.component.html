@@ -1,1 +1,57 @@
-<p>cart works!</p>
+<div class="container mb-4">
+    <div class="container text-center" *ngIf="myShoppingCart.length == 0">
+        <ng-lottie containerClass="moving-box another-class" [styles]="styles" [options]="options"
+            (animationCreated)="animationCreated($event)"></ng-lottie>
+        <h3>Your cart is empty</h3>
+    </div>
+    <div class="mb-5 p-3">
+        <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="close()">
+            <strong>{{ alert.title }}</strong><br />
+            {{ alert.message }}
+        </ngb-alert>
+        <div class="card p-3 shadow mb-5" *ngFor="let cartOrder of myShoppingCart">
+            <div class="row">
+                <div class="col-7">
+                    <strong class="text-primary"> {{ cartOrder.orderDescription }} </strong>
+                </div>
+                <div class="col-5 text-end">
+                    <span class="badge bg-success" style="cursor: pointer;" (click)="placeOrder(cartOrder);">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Place Order
+                    </span>
+                    &nbsp;&nbsp;
+                    <span class="badge bg-danger" style="cursor: pointer;" (click)="removeOrderFromCart(cartOrder);">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i> Remove
+                    </span>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Particular</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let nameAndCount of cartOrder.itemNamesAndCount; index as i;">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ nameAndCount.itemName }}</td>
+                        <td>{{ nameAndCount.count }}</td>
+                        <td>{{ nameAndCount.unitPrice | currency: 'INR' }}</td>
+                        <td>{{ nameAndCount.count * nameAndCount.unitPrice | currency: 'INR' }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>Grand Total - </strong></td>
+                        <td>
+                            <strong>
+                                {{ getGrandTotal(cartOrder.orderDescription!) | currency: 'INR' }}
+                            </strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

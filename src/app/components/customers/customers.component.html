@@ -1,1 +1,35 @@
-<p>customers works!</p>
+<div class="container p-3">
+    <form>
+        <div class="mb-3 row">
+            <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Search :</label>
+            <div class="col-xs-3 col-sm-auto">
+                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter" (keyup)="searchInTable()"/>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let customer of custs$ | async; index as i">
+                <th scope="row">{{ i + 1 }}</th>
+                <td>
+                    <ngb-highlight [result]="customer.custFirstName" [term]="filter.value"></ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight [result]="customer.custLastName" [term]="filter.value"></ngb-highlight>
+                </td>
+                <td>
+                    <ngb-highlight [result]="customer.custEmail" [term]="filter.value"></ngb-highlight>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
