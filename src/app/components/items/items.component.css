@@ -1,0 +1,10 @@
+.card-header>span,
+.card-body>span,
+.card-footer>span {
+    float: right;
+}
+
+.card-header>span>mat-icon,
+.card-footer>span>mat-icon {
+    cursor: pointer;
+}

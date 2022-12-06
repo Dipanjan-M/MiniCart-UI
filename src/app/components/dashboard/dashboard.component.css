@@ -2,6 +2,6 @@
     float: right;
 }
 
-.card-body, .card-footer > span > mat-icon {
+.card-footer > span > mat-icon {
     cursor: pointer;
 }

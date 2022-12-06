@@ -53,10 +53,13 @@ export class DashboardComponent implements OnInit {
           this.router.navigate(['/login']);
         }
 
+
+        console.log(err.error);
+
         this.alert = {
           type: 'danger',
           title: 'Service Unavialable',
-          message: 'Item service is temporarily down'
+          message: err.error
         };
       }
     );

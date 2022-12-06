@@ -62,7 +62,7 @@ export class CartComponent implements OnInit {
   }
 
   placeOrder(cartOrder: CreateOrderModel) {
-    if(!this.submitted) {
+    if (!this.submitted) {
       this.submitted = true;
     } else {
       console.log("Still processing previous request. Unable to proceed with current request. Exiting....");
@@ -79,21 +79,29 @@ export class CartComponent implements OnInit {
         this.submitted = false;
       },
       err => {
-        if(err.status === HttpStatusCode.Unauthorized) {
+        if (err.status === HttpStatusCode.Unauthorized) {
           this.router.navigate(['/login']);
         }
-        if(err.status === HttpStatusCode.BadRequest) {
+        if (err.status === HttpStatusCode.BadRequest) {
           this.alert = {
             type: 'danger',
             title: 'Bad Request',
-            message: err.body
+            message: err.error
           };
         }
-        if(err.status === HttpStatusCode.InternalServerError) {
+        if (err.status === HttpStatusCode.InternalServerError) {
           this.alert = {
             type: 'danger',
             title: 'Internal Server Error',
-            message: err.body
+            message: err.error
+          };
+        }
+        if (err.status === HttpStatusCode.ServiceUnavailable) {
+          console.log(err);
+          this.alert = {
+            type: 'warning',
+            title: 'Service Unavilable!!',
+            message: err.error
           };
         }
         console.log('Request completed with failure');

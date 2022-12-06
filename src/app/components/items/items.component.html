@@ -1,7 +1,64 @@
-<div class="container mb-5">
-    <h4 class="display-4">Coming Soon...</h4>
-    <br/><br/><br/>
-    <br/><br/><br/>
-    <br/><br/><br/>
-    <br/><br/><br/>
+<div class="container-fluid mb-5">
+    <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="closeAlert()">
+        <strong>{{ alert.title }}</strong><br />
+        {{ alert.message }}
+    </ngb-alert>
+    <div class="row card-group mb-4">
+        <div class="col-3 mb-4" *ngFor="let item of items">
+            <div class="card h-100">
+                <div class="card-header">
+                    <strong> {{ item.name }} </strong>
+                    <span>
+                        <mat-icon matTooltip="Delete this item" (click)="delete(item)">
+                            delete
+                        </mat-icon>
+                    </span>
+                </div>
+                <div class="card-body">
+                    <p> {{ item.description }} </p>
+                    <span> {{ item.price | currency:'INR' }} </span>
+                </div>
+                <div class="card-footer">
+                    <span>
+                        <mat-icon matTooltip="Edit this Item" (click)="edit(editItem, item)">
+                            edit
+                        </mat-icon>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<ng-template #editItem let-modal1>
+    <div class="modal-header">
+        <h4 class="modal-title" id="edit-db-item">Edit Item</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal1.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body p-3">
+        <form #frm1="ngForm" class="p-3">
+            <div class="row mt-3">
+                <div class="col">
+                    <label class="form-label">Item Name</label>
+                    <input name="itemName" type="text" class="form-control" [value]="editingItem.name"
+                        [(ngModel)]="editingItem.name" />
+                    <label class="form-label">Price of the Item</label>
+                    <input name="itemPrice" type="number" class="form-control" [value]="editingItem.price"
+                        [(ngModel)]="editingItem.price" />
+                </div>
+                <div class="col">
+                    <label>Item Description</label>
+                    <textarea class="form-control" name="itemDesc" cols="40" rows="8" [value]="editingItem.description" [(ngModel)]="editingItem.description"></textarea>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-warning" (click)="modal1.close('Close click')"
+                    [disabled]="!frm1.valid">Edit</button>
+            </div>
+        </form>
+        <p>{{ editingItem | json }}</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal1.close('Close click')">Close</button>
+    </div>
+</ng-template>

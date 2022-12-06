@@ -78,6 +78,7 @@ export class RegistrationComponent implements OnInit {
           title: 'Success!',
           message: 'User registration is successful for <b>' + this.signUpRes?.firstName + ' ' + this.signUpRes?.lastName + '</b><br/>' + 'with email : <b>' + this.signUpRes?.email + '</b> and role : <b>' + this.signUpRes?.role.roleName + '</b>'
         };
+        this.onReset();
         this.submitted = false;
       },
       err => {
