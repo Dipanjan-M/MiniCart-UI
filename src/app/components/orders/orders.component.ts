@@ -14,6 +14,9 @@ import { OrderService } from 'src/app/services/order.service';
 })
 export class OrdersComponent implements OnInit {
 
+  isLoading: boolean = true;
+  alert: any;
+
   myOrders: OrderQuickView[] = [];
   orderSnap?: OrderSnapshot;
   orderTotalAmount: number = 0;
@@ -32,8 +35,22 @@ export class OrdersComponent implements OnInit {
         if (err.status === HttpStatusCode.Unauthorized) {
           this.router.navigate(['/login']);
         }
+        if (err.status === HttpStatusCode.ServiceUnavailable) {
+          this.alert = {
+            type: 'danger',
+            title: 'Service Unavialble!',
+            message: err.error
+          };
+        }
+      }, 
+      () => {
+        this.isLoading = false;
       }
     );
+  }
+
+  closeAlert(): void {
+    this.alert = undefined;
   }
 
   getTotal(unitPrice: number, qty: number) {
@@ -50,6 +67,13 @@ export class OrdersComponent implements OnInit {
       err => {
         if (err.status === HttpStatusCode.Unauthorized) {
           this.router.navigate(['/login']);
+        }
+        if (err.status === HttpStatusCode.ServiceUnavailable) {
+          this.alert = {
+            type: 'danger',
+            title: 'Service Unavialble!',
+            message: err.error
+          };
         }
       }
     );

@@ -1,4 +1,7 @@
 <div class="container mb-4">
+    <div *ngIf="isLoading">
+        <mat-spinner class="m-auto"></mat-spinner>
+    </div>
     <div class="container text-center" *ngIf="myShoppingCart.length == 0">
         <ng-lottie containerClass="moving-box another-class" [styles]="styles" [options]="options"
             (animationCreated)="animationCreated($event)"></ng-lottie>

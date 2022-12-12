@@ -3,6 +3,9 @@
         <strong>{{ alert.title }}</strong><br />
         {{ alert.message }}
     </ngb-alert>
+    <div *ngIf="isLoading">
+        <mat-spinner class="m-auto"></mat-spinner>
+    </div>
     <div class="row card-group mb-4">
         <div class="col-3 mb-4" *ngFor="let item of items">
             <div class="card h-100">

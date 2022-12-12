@@ -13,6 +13,9 @@ import { CustomerSosService } from 'src/app/services/customer-sos.service';
 })
 export class CustomersComponent implements OnInit {
 
+  isLoading: boolean = true;
+  alert: any;
+
   customers: CustomerSos[] = [];
   custs$?: Observable<CustomerSos[]>;
 
@@ -31,10 +34,30 @@ export class CustomersComponent implements OnInit {
       err => {
         if (err.status === HttpStatusCode.Unauthorized) {
           this.router.navigate(['/login']);
+        } else if(err.status === HttpStatusCode.ServiceUnavailable) {
+          this.alert = {
+            type: 'danger',
+            title: 'Yikes!',
+            message: err.error
+          };
+        } else {
+          this.alert = {
+            type: 'danger',
+            title: 'Internal Server Error!',
+            message: err.error
+          };
         }
+        this.isLoading = false;
+      },
+      () => {
+        this.isLoading = false;
       }
     );
 
+  }
+
+  closeAlert(): void {
+    this.alert = undefined;
   }
 
   search(text: string): CustomerSos[] {

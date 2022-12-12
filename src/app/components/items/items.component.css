@@ -8,3 +8,8 @@
 .card-footer>span>mat-icon {
     cursor: pointer;
 }
+
+.validation-err-msg {
+    font-size: 14px;
+    color: #f00;
+}

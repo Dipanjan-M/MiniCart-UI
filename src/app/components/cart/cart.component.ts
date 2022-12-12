@@ -15,6 +15,7 @@ import { CommonService } from 'src/app/utils/common.service';
 })
 export class CartComponent implements OnInit {
 
+  isLoading: boolean = false;
   cartKey?: string;
 
   myShoppingCart: CreateOrderModel[] = [];
@@ -64,6 +65,7 @@ export class CartComponent implements OnInit {
   placeOrder(cartOrder: CreateOrderModel) {
     if (!this.submitted) {
       this.submitted = true;
+      this.isLoading = true;
     } else {
       console.log("Still processing previous request. Unable to proceed with current request. Exiting....");
       return;
@@ -106,6 +108,9 @@ export class CartComponent implements OnInit {
         }
         console.log('Request completed with failure');
         this.submitted = false;
+      }, 
+      () => {
+        this.isLoading = false;
       }
     );
   }

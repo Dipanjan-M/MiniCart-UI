@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { CommonService } from 'src/app/utils/common.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private _auth: AuthService, private _router: Router, private commonSvc: CommonService) { 
+  constructor(private _auth: AuthService, private _router: Router, private commonSvc: CommonService) {
     window.sessionStorage.removeItem('userDetails');
     window.sessionStorage.removeItem('token');
   }
@@ -44,12 +45,20 @@ export class LoginComponent implements OnInit {
         this._router.navigate(['/dashboard']);
       },
       err => {
-        let serverErr = err.error;
-        this.alert = {
-          type: 'danger',
-          title: 'Authentication Error!',
-          message: serverErr.msg
-        };
+        if (err.status == HttpStatusCode.ServiceUnavailable) {
+          this.alert = {
+            type: 'danger',
+            title: 'yikes!',
+            message: err.error
+          };
+        } else {
+          let serverErr = err.error;
+          this.alert = {
+            type: 'danger',
+            title: 'Authentication Error!',
+            message: serverErr.msg
+          };
+        }
         this.submitted = false;
       }
     );

@@ -3,6 +3,59 @@
         <strong>{{ alert.title }}</strong><br />
         {{ alert.message }}
     </ngb-alert>
+    <div *ngIf="isLoading">
+        <mat-spinner class="m-auto"></mat-spinner>
+    </div>
+    <ng-template [ngIf]="addItemButtonClicked">
+        <h5 class="text-center">Add new Item</h5>
+        <div class="mb-3">
+            <form #createfrm="ngForm" class="p-3">
+                <div class="row mt-3">
+                    <div class="col">
+                        <label class="form-label">Item Name</label>
+                        <input name="itemName" type="text" class="form-control" [value]="newItemDto.name"
+                            [(ngModel)]="newItemDto.name" required
+                            [ngClass]="{'border border-danger': evaluateFieldError('name')}" />
+                        <ng-container *ngIf=" evaluateFieldError('name')">
+                            <div *ngFor="let err of serverValidation?.name">
+                                <span class="validation-err-msg">{{ err }}</span>
+                            </div>
+                        </ng-container>
+                        <label class="form-label">Price of the Item</label>
+                        <input name="itemPrice" type="number" class="form-control" [value]="newItemDto.price"
+                            [(ngModel)]="newItemDto.price" required
+                            [ngClass]="{'border border-danger': evaluateFieldError('price')}" />
+                        <ng-container *ngIf=" evaluateFieldError('price')">
+                            <div *ngFor="let err of serverValidation?.price">
+                                <span class="validation-err-msg">{{ err }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">Item Description</label>
+                        <textarea class="form-control" name="itemDesc" rows="4" [value]="newItemDto.description"
+                            [(ngModel)]="newItemDto.description" required
+                            [ngClass]="{'border border-danger': evaluateFieldError('description')}">
+                        </textarea>
+                        <ng-container *ngIf=" evaluateFieldError('description')">
+                            <div *ngFor="let err of serverValidation?.description">
+                                <span class="validation-err-msg">{{ err }}</span>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button class="btn btn-success" (click)="addItemReq();"
+                        [disabled]="!createfrm.valid || submitted">Add</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-outline-warning" (click)="resetAddItemForm(createfrm);">Reset</button>
+                    &nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-outline-dark" (click)="closeAddItemForm();">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </ng-template>
+    <button class="btn btn-outline-info mb-4" (click)="openAddItemForm()">Add New Item</button>
     <div class="row card-group mb-4">
         <div class="col-3 mb-4" *ngFor="let item of items">
             <div class="card h-100">
@@ -41,22 +94,24 @@
                 <div class="col">
                     <label class="form-label">Item Name</label>
                     <input name="itemName" type="text" class="form-control" [value]="editingItem.name"
-                        [(ngModel)]="editingItem.name" />
+                        [(ngModel)]="editingItem.name" required />
                     <label class="form-label">Price of the Item</label>
                     <input name="itemPrice" type="number" class="form-control" [value]="editingItem.price"
-                        [(ngModel)]="editingItem.price" />
+                        [(ngModel)]="editingItem.price" required />
                 </div>
                 <div class="col">
                     <label>Item Description</label>
-                    <textarea class="form-control" name="itemDesc" cols="40" rows="8" [value]="editingItem.description" [(ngModel)]="editingItem.description"></textarea>
+                    <textarea class="form-control" name="itemDesc" rows="6" [value]="editingItem.description"
+                        [(ngModel)]="editingItem.description" required>
+                    </textarea>
                 </div>
             </div>
             <div class="text-center mt-3">
-                <button class="btn btn-warning" (click)="modal1.close('Close click')"
-                    [disabled]="!frm1.valid">Edit</button>
+                <button class="btn btn-warning" (click)="submitEditReq();modal1.close('Close click')"
+                    [disabled]="!frm1.valid || submitted">Edit</button>
             </div>
         </form>
-        <p>{{ editingItem | json }}</p>
+        <!-- <p>{{ editingItem | json }}</p> -->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal1.close('Close click')">Close</button>

@@ -1,4 +1,11 @@
 <div class="container pb-3 mb-4">
+    <ngb-alert *ngIf="alert" [type]="alert.type" (closed)="closeAlert()">
+        <strong>{{ alert.title }}</strong><br />
+        {{ alert.message }}
+    </ngb-alert>
+    <div *ngIf="isLoading">
+        <mat-spinner class="m-auto"></mat-spinner>
+    </div>
     <h2 *ngIf="myOrders.length == 0" class="pb-3 mb-4">No order found</h2>
     <!-- <div *ngFor="let orderOv of myOrders">{{ orderOv | json }}</div> -->
     <div class="row card-group mb-4">

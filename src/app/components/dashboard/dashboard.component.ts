@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
+  isLoading: boolean = true;
   alert: any;
   items?: Item[];
   submitted: boolean = false;
@@ -58,9 +59,12 @@ export class DashboardComponent implements OnInit {
 
         this.alert = {
           type: 'danger',
-          title: 'Service Unavialable',
+          title: 'Service Unavilable',
           message: err.error
         };
+      }, 
+      () => {
+        this.isLoading = false;
       }
     );
   }

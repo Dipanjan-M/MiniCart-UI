@@ -93,7 +93,7 @@ export class RegistrationComponent implements OnInit {
         } else {
           this.alert = {
             type: 'danger',
-            title: 'Yaieks!',
+            title: 'Yikes!',
             message: err.error
           };
         }
