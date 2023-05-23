@@ -6,7 +6,7 @@
     <div *ngIf="isLoading">
         <mat-spinner class="m-auto"></mat-spinner>
     </div>
-    <h2 *ngIf="myOrders.length == 0" class="pb-3 mb-4">No order found</h2>
+    <h2 *ngIf="myOrders.length == 0 && !isLoading" class="pb-3 mb-4">No order found</h2>
     <!-- <div *ngFor="let orderOv of myOrders">{{ orderOv | json }}</div> -->
     <div class="row card-group mb-4">
         <div class="col-3 mb-4" *ngFor="let orderOv of myOrders">
